@@ -1,14 +1,13 @@
-import React from 'react'
-import { Text, View } from 'react-native'
-import "../global.css"
+import CashierScreen from "@/components/CashierScreen";
+import React from "react";
+import { View } from "react-native";
+import "../global.css";
 const Cashier = () => {
-    return (
-         <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-xl font-bold text-blue-500">
-        Welcome to Nativewind!
-      </Text>
+  return (
+    <View className="flex-1 items-center justify-center bg-white">
+      <CashierScreen />
     </View>
-  )
-}
+  );
+};
 
-export default Cashier
+export default Cashier;

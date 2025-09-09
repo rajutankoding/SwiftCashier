@@ -1,75 +1,97 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ProductCategory, products } from "@/components/data";
+import TransactionDetailModal from "@/components/TransactionDetailModal";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { useState } from "react";
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+// Mengubah ProductCard menjadi komponen terpisah
+interface ProductCardProps {
+  item: any; // Ganti 'any' dengan tipe data Product yang sudah Anda definisikan
+  onAdd: (price: number) => void;
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+const ProductCard = ({ item, onAdd }: ProductCardProps) => (
+  <View className="w-1/4 p-1">
+    <TouchableOpacity onPress={() => onAdd(item.price)}>
+      <View className="bg-white rounded-lg shadow-sm overflow-hidden aspect-square items-center justify-center">
+        <Image
+          style={{ width: 80, height: 80 }}
+          source={{
+            uri: item.image,
+          }}
+        />
+      </View>
+      <Text className="text-primary">{item.name}</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+export default function HomeScreen() {
+  const categories: ProductCategory[] = ["Food", "Drink", "Snack"];
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  // Fungsi untuk menambah total harga dengan cara yang lebih aman (callback function)
+  const handleAddProduct = (price: number) => {
+    setTotalPrice((prevPrice) => prevPrice + price);
+  };
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-white items-center">
+      <View className="mt-10 flex-row bg-primeGrey rounded-full w-[90%]">
+        <TextInput className="mx-2" placeholder="Search Item..."></TextInput>
+      </View>
+      <FlatList
+        className="w-[90%] mt-4"
+        data={categories}
+        keyExtractor={(item) => item}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item: category }) => (
+          <View className="mb-4" key={category}>
+            <Text className="text-title font-extrabold">{category}</Text>
+            <FlatList
+              data={products.filter((p) => p.category === category)}
+              keyExtractor={(item) => item.id}
+              numColumns={4}
+              renderItem={({ item }) => (
+                <ProductCard item={item} onAdd={handleAddProduct} />
+              )}
+              contentContainerStyle={{ marginHorizontal: -4 }}
+            />
+          </View>
+        )}
+      />
+      <View className="flex-row bg-primary w-full h-20 items-center justify-between px-4">
+        <Text className="text-title font-extrabold">Total :</Text>
+        <Text className="text-title font-extrabold">
+          Rp. {totalPrice.toLocaleString("id-ID")}, 00
+        </Text>
+        <TouchableOpacity onPress={openModal} className="flex-row gap-1">
+          <Text className="text-title font-extrabold">Detail</Text>
+          <IconSymbol size={20} name="arrow.2.circlepath" color={"#080705"} />
+        </TouchableOpacity>
+      </View>
+      <TransactionDetailModal
+        isVisible={isModalVisible}
+        totalPrice={totalPrice}
+        onClose={closeModal}
+      />
+    </SafeAreaView>
+  );
+}
