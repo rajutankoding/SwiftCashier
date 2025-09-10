@@ -1,4 +1,9 @@
-import { ProductCategory, products } from "@/components/data";
+import {
+  CartItem,
+  Product,
+  ProductCategory,
+  products,
+} from "@/components/data";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useState } from "react";
@@ -12,36 +17,63 @@ import {
   View,
 } from "react-native";
 
-// Mengubah ProductCard menjadi komponen terpisah
-interface ProductCardProps {
-  item: any; // Ganti 'any' dengan tipe data Product yang sudah Anda definisikan
-  onAdd: (price: number) => void;
-}
-
-const ProductCard = ({ item, onAdd }: ProductCardProps) => (
-  <View className="w-1/4 p-1">
-    <TouchableOpacity onPress={() => onAdd(item.price)}>
-      <View className="bg-white rounded-lg shadow-sm overflow-hidden aspect-square items-center justify-center">
-        <Image
-          style={{ width: 80, height: 80 }}
-          source={{
-            uri: item.image,
-          }}
-        />
-      </View>
-      <Text className="text-primary">{item.name}</Text>
-    </TouchableOpacity>
-  </View>
-);
-
 export default function HomeScreen() {
   const categories: ProductCategory[] = ["Food", "Drink", "Snack"];
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
-  // Fungsi untuk menambah total harga dengan cara yang lebih aman (callback function)
-  const handleAddProduct = (price: number) => {
-    setTotalPrice((prevPrice) => prevPrice + price);
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const ProductCard = ({ item }: { item: Product }) => (
+    <View className="w-1/4 p-1">
+      <TouchableOpacity onPress={() => handleAddProduct(item)}>
+        <View className="bg-white rounded-lg shadow-sm overflow-hidden aspect-square items-center justify-center">
+          <Image
+            style={{ width: 80, height: 80 }}
+            source={{ uri: item.image }}
+          />
+        </View>
+        <Text className="text-primary">{item.name}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const handleAddProduct = (itemToAdd: Product) => {
+    setCart((prevCart) => {
+      // Cari apakah item sudah ada di keranjang
+      const existingItem = prevCart.find((item) => item.id === itemToAdd.id);
+
+      if (existingItem) {
+        // Jika ada, buat array baru dengan kuantitas yang diperbarui
+        return prevCart.map((item) =>
+          item.id === itemToAdd.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        // Jika belum ada, tambahkan item baru dengan kuantitas 1
+        return [...prevCart, { ...itemToAdd, quantity: 1 }];
+      }
+    });
+  };
+
+  const handleRemoveItem = (idToRemove: string) => {
+    setCart((prevCart) => {
+      return prevCart
+        .map((item) =>
+          item.id === idToRemove
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0); // Filter untuk menghapus item dengan kuantitas 0
+    });
   };
 
   const openModal = () => {
@@ -55,7 +87,12 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white items-center">
       <View className="mt-10 flex-row bg-primeGrey rounded-full w-[90%]">
-        <TextInput className="mx-2" placeholder="Search Item..."></TextInput>
+        <TextInput
+          className="mx-2"
+          placeholder="Search Item..."
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
+        />
       </View>
       <FlatList
         className="w-[90%] mt-4"
@@ -69,9 +106,7 @@ export default function HomeScreen() {
               data={products.filter((p) => p.category === category)}
               keyExtractor={(item) => item.id}
               numColumns={4}
-              renderItem={({ item }) => (
-                <ProductCard item={item} onAdd={handleAddProduct} />
-              )}
+              renderItem={({ item }) => <ProductCard item={item} />}
               contentContainerStyle={{ marginHorizontal: -4 }}
             />
           </View>
@@ -89,8 +124,9 @@ export default function HomeScreen() {
       </View>
       <TransactionDetailModal
         isVisible={isModalVisible}
-        totalPrice={totalPrice}
+        cart={cart}
         onClose={closeModal}
+        onRemoveItem={handleRemoveItem}
       />
     </SafeAreaView>
   );

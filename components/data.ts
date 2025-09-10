@@ -7,21 +7,25 @@ export interface Product {
   category: "Food" | "Drink" | "Snack";
 }
 
+export interface CartItem extends Product {
+  quantity: number;
+}
+
 export const products: Product[] = [
   {
     id: "1",
     name: "Nasi Goreng",
     price: 25000,
     image:
-      "https://images.unsplash.com/photo-1572615962804-03a11b8543d8?fit=crop&w=400&q=80",
+      "https://media.istockphoto.com/id/186826982/id/foto/sepiring-nasi-goreng-udang-di-atas-placemat-dan-meja-kayu.webp?a=1&b=1&s=612x612&w=0&k=20&c=WZ4trzDcVMmXPx_Kp_pqaz0kH4ULYP87U00Do5OAJZc=",
     category: "Food",
   },
   {
     id: "2",
-    name: "Ayam Geprek",
+    name: "Ayam Goreng",
     price: 28000,
     image:
-      "https://images.unsplash.com/photo-1621213797669-7ae37415170d?fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGF5YW18ZW58MHx8MHx8fDA%3D",
     category: "Food",
   },
   {
@@ -38,7 +42,7 @@ export const products: Product[] = [
     name: "Es Kopi",
     price: 18000,
     image:
-      "https://images.unsplash.com/photo-1541167716161-073c6838a169?fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1592663527359-cf6642f54cff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZXMlMjBrb3BpfGVufDB8fDB8fHww",
     category: "Drink",
   },
   {
@@ -46,7 +50,7 @@ export const products: Product[] = [
     name: "Jus Jeruk",
     price: 15000,
     image:
-      "https://images.unsplash.com/photo-1600713994358-1317a36c646b?fit=crop&w=400&q=80",
+      "https://media.istockphoto.com/id/1454673088/id/foto/menuangkan-jus-jeruk-segar-dan-sehat.webp?a=1&b=1&s=612x612&w=0&k=20&c=33Qz3UJ8MIvBt23LhO_XbRsIewcA9sXaf-uU5pOSrGk=",
     category: "Drink",
   },
   {
@@ -54,7 +58,7 @@ export const products: Product[] = [
     name: "Lemon Tea",
     price: 12000,
     image:
-      "https://images.unsplash.com/photo-1622359052528-7952a8b98165?fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bGVtb24lMjB0ZWF8ZW58MHx8MHx8fDA%3D",
     category: "Drink",
   },
 
@@ -63,7 +67,7 @@ export const products: Product[] = [
     name: "Keripik Kentang",
     price: 10000,
     image:
-      "https://images.unsplash.com/photo-1627883584742-f283b9c92a95?fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1617102738820-bee2545405fd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8a2VyaXBpayUyMGtlbnRhbmd8ZW58MHx8MHx8fDA%3D",
     category: "Snack",
   },
   {
@@ -71,7 +75,7 @@ export const products: Product[] = [
     name: "Kue Coklat",
     price: 15000,
     image:
-      "https://images.unsplash.com/photo-1620950334800-410a76f62590?fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8a3VlJTIwY29rbGF0fGVufDB8fDB8fHww",
     category: "Snack",
   },
   {
@@ -79,15 +83,15 @@ export const products: Product[] = [
     name: "Magelangan",
     price: 25000,
     image:
-      "https://images.unsplash.com/photo-1572615962804-03a11b8543d8?fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1664717698774-84f62382613b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bmFzaSUyMG9yYWslMjBhcmlrfGVufDB8fDB8fHww",
     category: "Food",
   },
   {
     id: "10",
-    name: "Orak Arik Teur",
+    name: "Orak Arik Telur",
     price: 25000,
     image:
-      "https://images.unsplash.com/photo-1572615962804-03a11b8543d8?fit=crop&w=400&q=80",
+      "https://media.istockphoto.com/id/2157431026/id/foto/orak-arik-sayuran-dan-telur-atau-orak-arik-sayuran-dan-telur-melayani-di-piring-menu-makanan.webp?a=1&b=1&s=612x612&w=0&k=20&c=tz10qeQrcrFFQQQf-BcbCV78e4a3gdjlmdQOrhHbkis=",
     category: "Food",
   },
   {
@@ -95,7 +99,7 @@ export const products: Product[] = [
     name: "Burjo",
     price: 25000,
     image:
-      "https://plus.unsplash.com/premium_photo-1675252369719-dd52bc69c3df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D",
+      "https://images.unsplash.com/photo-1636044990152-53fc0e6a3b45?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGJ1YnVyJTIwa2FjYW5nJTIwaGlqYXV8ZW58MHx8MHx8fDA%3D",
     category: "Food",
   },
 ];
