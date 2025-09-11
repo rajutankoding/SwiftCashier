@@ -23,6 +23,14 @@ const MAPPING = {
   "chevron.right": "chevron-right",
   "arrow.2.circlepath": "arrow-forward",
   "delete.forward.fill": "delete",
+  "cart.badge.clock.fill": "card-travel",
+  // Contoh penambahan baru:
+  "plus.circle.fill": "add-circle-outline",
+  "minus.circle.fill": "remove-circle",
+  "person.fill": "person",
+  "bell.fill": "notifications",
+  magnifyingglass: "search",
+  "star.fill": "star",
 } as IconMapping;
 
 /**
