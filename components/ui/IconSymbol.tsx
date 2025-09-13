@@ -31,6 +31,7 @@ const MAPPING = {
   "bell.fill": "notifications",
   magnifyingglass: "search",
   "star.fill": "star",
+  "xmark.circle.fill": "close",
 } as IconMapping;
 
 /**

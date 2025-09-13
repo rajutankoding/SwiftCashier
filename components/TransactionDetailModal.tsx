@@ -17,6 +17,8 @@ interface TransactionDetailModalProps {
   cart: CartItem[];
   onClose: () => void;
   onRemoveItem: (id: string) => void;
+  flexible?: boolean;
+  children?: React.ReactElement;
 }
 
 const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
@@ -24,6 +26,8 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
   cart,
   onClose,
   onRemoveItem,
+  flexible,
+  children,
 }) => {
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -60,32 +64,42 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Detail Transaksi</Text>
+        {flexible ? (
+          children
+        ) : (
+          <>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitle}>Detail Transaksi</Text>
 
-          <FlatList
-            data={cart}
-            renderItem={renderCartItem}
-            keyExtractor={(item) => item.id + Math.random()} // Gunakan key unik karena item bisa ganda
-            style={styles.cartList}
-            ListEmptyComponent={<Text>Keranjang kosong.</Text>}
-          />
+              <FlatList
+                data={cart}
+                renderItem={renderCartItem}
+                keyExtractor={(item) => item.id + Math.random()} // Gunakan key unik karena item bisa ganda
+                style={styles.cartList}
+                ListEmptyComponent={<Text>Keranjang kosong.</Text>}
+              />
 
-          <View style={styles.totalContainer}>
-            <Text style={styles.totalText}>Total:</Text>
-            <Text style={styles.totalText}>
-              Rp. {totalPrice.toLocaleString("id-ID")}
-            </Text>
-          </View>
+              <View style={styles.totalContainer}>
+                <Text style={styles.totalText}>Total:</Text>
+                <Text style={styles.totalText}>
+                  Rp. {totalPrice.toLocaleString("id-ID")}
+                </Text>
+              </View>
 
-          <TouchableOpacity
-            className=" flex-row bg-primary rounded-full w-1/2 h-10 items-center px-4 gap-1 mt-4"
-            onPress={onClose}
-          >
-            <Text className="text-center font-bold">Check Out</Text>
-            <IconSymbol size={20} name="arrow.2.circlepath" color={"#080705"} />
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity
+                className=" flex-row bg-primary rounded-full w-1/2 h-10 items-center px-4 gap-1 mt-4"
+                onPress={onClose}
+              >
+                <Text className="text-center font-bold">Check Out</Text>
+                <IconSymbol
+                  size={20}
+                  name="arrow.2.circlepath"
+                  color={"#080705"}
+                />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
     </Modal>
   );

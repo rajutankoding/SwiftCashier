@@ -1,4 +1,5 @@
 import { CartItem } from "@/components/data";
+import EditProductModalContent from "@/components/EditProductModalContent";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import React, { useState } from "react";
@@ -11,7 +12,7 @@ import {
 } from "react-native";
 
 const Product = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const openModal = () => {
@@ -63,7 +64,13 @@ const Product = () => {
         cart={cart}
         onClose={closeModal}
         onRemoveItem={handleRemoveItem}
-      />
+        flexible={true}
+      >
+        <View className="w-full">
+          {/* <Text className="text-title">Add Product</Text> */}
+          <EditProductModalContent onClose={closeModal} />
+        </View>
+      </TransactionDetailModal>
     </SafeAreaView>
   );
 };
