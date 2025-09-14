@@ -1,35 +1,55 @@
+import { Product } from "@/components/data";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { IconSymbol } from "./ui/IconSymbol"; // Gunakan komponen ikon yang sudah ada
+import { IconSymbol } from "./ui/IconSymbol";
 
 interface EditProductModalContentProps {
   onClose: () => void;
-  onSave: () => void;
+  onSave: (product: Omit<Product, "id">) => void; // biar strong typing
 }
 
 const EditProductModalContent: React.FC<EditProductModalContentProps> = ({
   onClose,
   onSave,
 }) => {
-  // State untuk menyimpan data input dan URI gambar
-  const [imageUri, setImageUri] = useState<string | null>(null);
-  const [roomName, setRoomName] = useState("");
+  const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [roomDetail, setRoomDetail] = useState("");
+  const [image, setImage] = useState<string | null>(null);
+  const [category, setCategory] = useState<Product["category"]>("Food");
 
-  // Fungsi untuk memilih gambar dari galeri
+  // Pilih gambar
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      //   mediaTypes: ImagePicker.MediaType.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      setImage(result.assets[0].uri);
     }
+  };
+
+  // Simpan produk
+  const handleSave = () => {
+    if (!name || !price || !category) {
+      alert("Lengkapi semua data produk!");
+      return;
+    }
+
+    onSave({
+      name,
+      price: parseFloat(price),
+      image: image ?? "",
+      category,
+    });
+
+    // Reset form
+    setName("");
+    setPrice("");
+    setImage(null);
+    setCategory("Food");
   };
 
   return (
@@ -42,27 +62,26 @@ const EditProductModalContent: React.FC<EditProductModalContentProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* Bagian Gambar */}
+      {/* Gambar */}
       <TouchableOpacity
         onPress={pickImage}
         className="mb-6 bg-gray-200 rounded-lg overflow-hidden items-center justify-center"
         style={{ width: "100%", aspectRatio: 1.5 }}
       >
-        {imageUri ? (
-          <Image source={{ uri: imageUri }} className="w-full h-full" />
+        {image ? (
+          <Image source={{ uri: image }} className="w-full h-full" />
         ) : (
-          <Text className="text-gray-500 text-lg">Image</Text>
+          <Text className="text-gray-500 text-lg">Choose Image</Text>
         )}
       </TouchableOpacity>
 
-      {/* Bagian Detail */}
-      <Text className="text-lg font-bold mb-2">Details</Text>
+      {/* Form Input */}
       <View className="space-y-4 mb-6">
         <TextInput
           className="bg-gray-100 p-3 rounded-md border border-gray-300"
           placeholder="Item Name"
-          value={roomName}
-          onChangeText={setRoomName}
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           className="bg-gray-100 p-3 rounded-md border border-gray-300"
@@ -71,18 +90,26 @@ const EditProductModalContent: React.FC<EditProductModalContentProps> = ({
           value={price}
           onChangeText={setPrice}
         />
-        <TextInput
-          className="bg-gray-100 p-3 rounded-md border border-gray-300 h-24"
-          placeholder="Item Detail"
-          multiline={true}
-          value={roomDetail}
-          onChangeText={setRoomDetail}
-        />
+
+        {/* Category - bisa diganti Dropdown */}
+        <View className="flex-row justify-around">
+          {(["Food", "Drink", "Snack"] as Product["category"][]).map((c) => (
+            <TouchableOpacity
+              key={c}
+              onPress={() => setCategory(c)}
+              className={`px-4 py-2 rounded-md ${
+                category === c ? "bg-gray-400" : "bg-gray-200"
+              }`}
+            >
+              <Text className="font-bold">{c}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
-      {/* Tombol Check Out */}
+      {/* Tombol Save */}
       <TouchableOpacity
-        onPress={onSave}
+        onPress={handleSave}
         className="flex-row items-center justify-center p-4 bg-gray-300 rounded-full"
       >
         <Text className="text-lg font-bold mr-2">Save</Text>

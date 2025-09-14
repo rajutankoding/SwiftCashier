@@ -6,6 +6,8 @@ import {
 } from "@/components/data";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { getProducts } from "@/db/database";
+import { useFocusEffect } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -19,6 +21,7 @@ import {
 
 export default function HomeScreen() {
   const categories: ProductCategory[] = ["Food", "Drink", "Snack"];
+  const [product, setProduct] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -30,6 +33,15 @@ export default function HomeScreen() {
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const loadProducts = async () => {
+    const items = await getProducts();
+    setProduct(items);
+  };
+
+  useFocusEffect(() => {
+    loadProducts();
+  });
 
   const ProductCard = ({ item }: { item: Product }) => (
     <View className="w-1/4 p-1">
@@ -103,7 +115,7 @@ export default function HomeScreen() {
           <View className="mb-4" key={category}>
             <Text className="text-title font-extrabold">{category}</Text>
             <FlatList
-              data={products.filter((p) => p.category === category)}
+              data={product.filter((p) => p.category === category)}
               keyExtractor={(item) => item.id}
               numColumns={4}
               renderItem={({ item }) => <ProductCard item={item} />}
