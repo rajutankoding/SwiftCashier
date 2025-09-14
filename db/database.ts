@@ -1,5 +1,5 @@
-import { Product } from "@/components/data"; // pakai interface Product yang kamu punya
-import { randomUUID } from "expo-crypto"; // untuk generate UUID
+import { Product } from "@/components/data";
+import { randomUUID } from "expo-crypto";
 import * as SQLite from "expo-sqlite";
 
 let db: SQLite.SQLiteDatabase | null = null;
@@ -21,18 +21,15 @@ export const initDB = async (): Promise<SQLite.SQLiteDatabase> => {
   return db;
 };
 
-// Tambah produk
+// Tambah produk (pakai object biar lebih clean)
 export const addProduct = async (
-  name: string,
-  price: number,
-  image: string,
-  category: Product["category"]
+  product: Omit<Product, "id">
 ): Promise<void> => {
   const database = await initDB();
   const id = randomUUID(); // generate UUID string
   await database.runAsync(
     "INSERT INTO products (id, name, price, image, category) VALUES (?, ?, ?, ?, ?);",
-    [id, name, price, image, category]
+    [id, product.name, product.price, product.image, product.category]
   );
 };
 

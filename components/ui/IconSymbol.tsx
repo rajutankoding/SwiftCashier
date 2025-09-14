@@ -32,6 +32,7 @@ const MAPPING = {
   magnifyingglass: "search",
   "star.fill": "star",
   "xmark.circle.fill": "close",
+  "trash.fill": "delete-forever",
 } as IconMapping;
 
 /**
