@@ -1,14 +1,8 @@
-import {
-  CartItem,
-  Product,
-  ProductCategory,
-  products,
-} from "@/components/data";
+import { CartItem, Product, ProductCategory } from "@/components/data";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { getProducts } from "@/db/database";
-import { useFocusEffect } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -30,7 +24,7 @@ export default function HomeScreen() {
     0
   );
 
-  const filteredProducts = products.filter((product) =>
+  const filteredProducts = product.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -39,9 +33,9 @@ export default function HomeScreen() {
     setProduct(items);
   };
 
-  useFocusEffect(() => {
+  useEffect(() => {
     loadProducts();
-  });
+  }, []);
 
   const ProductCard = ({ item }: { item: Product }) => (
     <View className="w-1/4 p-1">
@@ -98,7 +92,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white items-center">
-      <View className="mt-10 flex-row bg-secondary rounded-full w-[90%]">
+      <View className="mt-10 flex-row bg-utility rounded-full w-[90%]">
         <TextInput
           className="mx-2"
           placeholder="Search Item..."
@@ -115,7 +109,7 @@ export default function HomeScreen() {
           <View className="mb-4" key={category}>
             <Text className="text-title font-extrabold">{category}</Text>
             <FlatList
-              data={product.filter((p) => p.category === category)}
+              data={filteredProducts.filter((p) => p.category === category)}
               keyExtractor={(item) => item.id}
               numColumns={4}
               renderItem={({ item }) => <ProductCard item={item} />}
