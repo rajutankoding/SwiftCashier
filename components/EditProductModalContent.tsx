@@ -5,10 +5,12 @@ import { IconSymbol } from "./ui/IconSymbol"; // Gunakan komponen ikon yang suda
 
 interface EditProductModalContentProps {
   onClose: () => void;
+  onSave: () => void;
 }
 
 const EditProductModalContent: React.FC<EditProductModalContentProps> = ({
   onClose,
+  onSave,
 }) => {
   // State untuk menyimpan data input dan URI gambar
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -80,10 +82,10 @@ const EditProductModalContent: React.FC<EditProductModalContentProps> = ({
 
       {/* Tombol Check Out */}
       <TouchableOpacity
-        onPress={() => console.log("Check Out")}
+        onPress={onSave}
         className="flex-row items-center justify-center p-4 bg-gray-300 rounded-full"
       >
-        <Text className="text-lg font-bold mr-2">Check Out</Text>
+        <Text className="text-lg font-bold mr-2">Save</Text>
         <IconSymbol size={20} name="arrow.right" color="black" />
       </TouchableOpacity>
     </View>

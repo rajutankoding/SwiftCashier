@@ -1,4 +1,4 @@
-import { CartItem } from "@/components/data";
+import { CartItem, Product as ProductType } from "@/components/data";
 import EditProductModalContent from "@/components/EditProductModalContent";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
@@ -10,10 +10,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 const Product = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
+
+  // useEffect(() => {
+  //   try {
+  //     const storedProducts = productStorage.getString("products");
+  //     if (storedProducts) {
+  //       setProducts(JSON.parse(storedProducts));
+  //     }
+  //   } catch (e) {
+  //     console.log("Failed to load product from Storage ", e);
+  //   }
+  // }, []);
 
   const openModal = () => {
     setIsModalVisible(true);
@@ -33,8 +44,23 @@ const Product = () => {
         .filter((item) => item.quantity > 0); // Filter untuk menghapus item dengan kuantitas 0
     });
   };
+
+  const handleSave = (newProductData: Omit<ProductType, "id">) => {
+    console.log("Handle Save");
+    // const newProduct: ProductType = {
+    //   id: Date.now().toString(),
+    //   ...newProductData,
+    // };
+
+    // const updateProducts = [...products, newProduct];
+    // setProducts(updateProducts);
+
+    // productStorage.set("products", JSON.stringify(updateProducts));
+    closeModal();
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white items-center">
+    <SafeAreaView className="flex-1 bg-secondary items-center">
       <TouchableOpacity
         className="flex-row m-4 items-center gap-1 w-[90%] mt-10"
         onPress={openModal}
@@ -42,7 +68,7 @@ const Product = () => {
         <IconSymbol size={20} name="plus.circle.fill" color={"#080705"} />
         <Text>Add Item</Text>
       </TouchableOpacity>
-      <View className="flex-row items-center justify-between p-2 w-[90%]">
+      <View className="flex-row bg-utility items-center justify-between p-2 w-[90%]">
         <Image
           style={{ width: 80, height: 80 }}
           source={{
@@ -54,7 +80,10 @@ const Product = () => {
           <Text className="text-title font-bold">Rp. 12.000, 00</Text>
           <Text className="text-title">Nasi Goreng Telur</Text>
         </View>
-        <TouchableOpacity className="flex-row">
+        <TouchableOpacity
+          className = "flex-row"
+          onPress   = {() => console.log("Edit")}
+        >
           <Text>Edit</Text>
           <IconSymbol size={20} name="arrow.2.circlepath" color={"#080705"} />
         </TouchableOpacity>
@@ -68,7 +97,10 @@ const Product = () => {
       >
         <View className="w-full">
           {/* <Text className="text-title">Add Product</Text> */}
-          <EditProductModalContent onClose={closeModal} />
+          <EditProductModalContent
+            onClose={closeModal}
+            onSave={() => console.log("Save")}
+          />
         </View>
       </TransactionDetailModal>
     </SafeAreaView>

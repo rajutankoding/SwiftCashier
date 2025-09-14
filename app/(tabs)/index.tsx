@@ -86,7 +86,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white items-center">
-      <View className="mt-10 flex-row bg-primeGrey rounded-full w-[90%]">
+      <View className="mt-10 flex-row bg-secondary rounded-full w-[90%]">
         <TextInput
           className="mx-2"
           placeholder="Search Item..."

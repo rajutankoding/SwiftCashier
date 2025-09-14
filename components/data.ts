@@ -7,6 +7,23 @@ export interface Product {
   category: "Food" | "Drink" | "Snack";
 }
 
+export const MenuManagement = [
+  {
+    id: "1",
+    title: "Management Products",
+    to: "/(features)/(managementProduct)/product",
+  },
+  {
+    id: "2",
+    title: "Management Promotion",
+    to: "/(features)/(promotion)",
+  },
+  { id: "3", title: "Management Stock", to: "Nicee" },
+  { id: "4", title: "Management Stock", to: "Nicee" },
+  { id: "5", title: "Management Stock", to: "Nicee" },
+  { id: "6", title: "Management Stock", to: "Nicee" },
+];
+
 export interface CartItem extends Product {
   quantity: number;
 }
