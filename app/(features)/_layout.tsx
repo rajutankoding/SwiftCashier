@@ -4,6 +4,7 @@ import "react-native-reanimated";
 export default function featuresLayout() {
   return (
     <Stack>
+      <Stack.Screen name="(managementApps)" options={{ headerShown: false }} />
       <Stack.Screen
         name="(managementProduct)"
         options={{ headerShown: false }}

@@ -19,7 +19,7 @@ const Management = () => {
           <View className="flex-row items-center p-1 w-[50%] h-20">
             <TouchableOpacity
               onPress={() => handleNav({ item: item.to })}
-              className="bg-secondary justify-center w-full h-full"
+              className="bg-utility justify-center w-full h-full"
             >
               <Text className="text-center w-[90%] text-title font-bold">
                 {item.title}

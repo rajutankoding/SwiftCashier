@@ -1,7 +1,9 @@
 import { CartItem, Product, ProductCategory } from "@/components/data";
+import ReceiptScreen from "@/components/ReceiptScreen";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { getProducts } from "@/db/database";
+import { authenticateUser } from "@/utils/authenticateUser";
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -19,6 +21,7 @@ export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [receipt, setReceipt] = useState(false);
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -89,6 +92,19 @@ export default function HomeScreen() {
   const closeModal = () => {
     setIsModalVisible(false);
   };
+  const checkOut = async () => {
+    const isAuth = await authenticateUser();
+    if (!isAuth) {
+      console.warn("Akses ditolak");
+      return;
+    }
+    setReceipt(true);
+  };
+  const closeReceipt = () => {
+    setReceipt(false);
+    setIsModalVisible(false);
+    setCart([]);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white items-center">
@@ -123,7 +139,10 @@ export default function HomeScreen() {
         <Text className="text-title font-extrabold">
           Rp. {totalPrice.toLocaleString("id-ID")}, 00
         </Text>
-        <TouchableOpacity onPress={openModal} className="flex-row gap-1">
+        <TouchableOpacity
+          onPress={openModal}
+          className="flex-row h-full items-center gap-1"
+        >
           <Text className="text-title font-extrabold">Detail</Text>
           <IconSymbol size={20} name="arrow.2.circlepath" color={"#080705"} />
         </TouchableOpacity>
@@ -132,8 +151,18 @@ export default function HomeScreen() {
         isVisible={isModalVisible}
         cart={cart}
         onClose={closeModal}
+        checkOut={checkOut}
+        flexible={receipt}
         onRemoveItem={handleRemoveItem}
-      />
+      >
+        <ReceiptScreen
+          cart={cart}
+          totalPrice={totalPrice}
+          transactionId={"ID Transaction"}
+          timestamp={Date.now().toString()}
+          onClose={closeReceipt}
+        />
+      </TransactionDetailModal>
     </SafeAreaView>
   );
 }

@@ -17,6 +17,7 @@ interface TransactionDetailModalProps {
   cart: CartItem[];
   onClose: () => void;
   onRemoveItem: (id: string) => void;
+  checkOut?: () => void;
   flexible?: boolean;
   children?: React.ReactElement;
 }
@@ -26,6 +27,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
   cart,
   onClose,
   onRemoveItem,
+  checkOut,
   flexible,
   children,
 }) => {
@@ -88,7 +90,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
 
               <TouchableOpacity
                 className=" flex-row bg-primary rounded-full w-1/2 h-10 items-center px-4 gap-1 mt-4"
-                onPress={onClose}
+                onPress={checkOut}
               >
                 <Text className="text-center font-bold">Check Out</Text>
                 <IconSymbol
@@ -98,6 +100,9 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
                 />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity className="bg-secondary" onPress={onClose}>
+              <IconSymbol size={24} name="xmark.circle.fill" color="gray" />
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
   },
 
   cartList: {
-    maxHeight: 200, // Batasi tinggi daftar agar bisa digulir
+    maxHeight: 400, // Batasi tinggi daftar agar bisa digulir
     width: "100%",
   },
   cartItem: {

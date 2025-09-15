@@ -9,6 +9,11 @@ export interface Product {
 
 export const MenuManagement = [
   {
+    id: "0",
+    title: "App Settings",
+    to: "/(features)/(managementApps)/",
+  },
+  {
     id: "1",
     title: "Management Products",
     to: "/(features)/(managementProduct)/product",
