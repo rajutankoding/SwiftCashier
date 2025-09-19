@@ -35,6 +35,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
   const renderCartItem = ({ item }: { item: CartItem }) => (
     <View className="flex-row items-center justify-between p-2 border-b border-gray-200 bg-white rounded-lg shadow-sm mb-2">
       <Image
@@ -58,6 +59,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
       </TouchableOpacity>
     </View>
   );
+
   return (
     <Modal
       animationType="slide"

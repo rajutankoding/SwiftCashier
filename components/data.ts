@@ -23,7 +23,7 @@ export const MenuManagement = [
     title: "Management Promotion",
     to: "/(features)/(promotion)",
   },
-  { id: "3", title: "Management Stock", to: "Nicee" },
+  { id: "3", title: "Report", to: "/(features)/(report)" },
   { id: "4", title: "Management Stock", to: "Nicee" },
   { id: "5", title: "Management Stock", to: "Nicee" },
   { id: "6", title: "Management Stock", to: "Nicee" },

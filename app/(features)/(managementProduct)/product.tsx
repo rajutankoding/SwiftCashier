@@ -8,7 +8,6 @@ import {
   getProducts,
   updateProduct,
 } from "@/db/database";
-import { authenticateUser } from "@/utils/authenticateUser";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -65,11 +64,11 @@ const Product = () => {
   };
 
   const handleSave = async (data: Omit<ProductType, "id"> | ProductType) => {
-    const isAuth = await authenticateUser();
-    if (!isAuth) {
-      console.warn("Akses ditolak");
-      return;
-    }
+    // const isAuth = await authenticateUser();
+    // if (!isAuth) {
+    //   console.warn("Akses ditolak");
+    //   return;
+    // }
     try {
       if ("id" in data) {
         // update
@@ -86,11 +85,11 @@ const Product = () => {
   };
 
   const handleDelete = async (product: ProductType) => {
-    const isAuth = await authenticateUser();
-    if (!isAuth) {
-      console.warn("Akses ditolak");
-      return;
-    }
+    // const isAuth = await authenticateUser();
+    // if (!isAuth) {
+    //   console.warn("Akses ditolak");
+    //   return;
+    // }
     try {
       await deleteProduct(product.id);
       await loadProducts();

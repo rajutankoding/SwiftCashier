@@ -10,6 +10,7 @@ export default function featuresLayout() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="(promotion)" options={{ headerShown: false }} />
+      <Stack.Screen name="(report)" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -2,8 +2,7 @@ import { CartItem, Product, ProductCategory } from "@/components/data";
 import ReceiptScreen from "@/components/ReceiptScreen";
 import TransactionDetailModal from "@/components/TransactionDetailModal";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { getProducts } from "@/db/database";
-import { authenticateUser } from "@/utils/authenticateUser";
+import { getProducts, saveTransaction } from "@/db/database";
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -22,6 +21,7 @@ export default function HomeScreen() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [receipt, setReceipt] = useState(false);
+  const [loading, setLoading] = useState(false);
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -93,17 +93,42 @@ export default function HomeScreen() {
     setIsModalVisible(false);
   };
   const checkOut = async () => {
-    const isAuth = await authenticateUser();
-    if (!isAuth) {
-      console.warn("Akses ditolak");
-      return;
-    }
+    // const isAuth = await authenticateUser();
+    // if (!isAuth) {
+    //   console.warn("Akses ditolak");
+    //   return;
+    // }
     setReceipt(true);
   };
   const closeReceipt = () => {
     setReceipt(false);
     setIsModalVisible(false);
     setCart([]);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      setLoading(true);
+      // simpan transaksi ke DB
+      await saveTransaction(
+        cart.map((item) => ({
+          product: {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            category: item.category,
+          },
+          quantity: item.quantity,
+        }))
+      );
+      setReceipt(true);
+    } catch (err) {
+      console.error("Gagal menyimpan transaksi:", err);
+      alert("Terjadi kesalahan saat menyimpan transaksi");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -151,7 +176,7 @@ export default function HomeScreen() {
         isVisible={isModalVisible}
         cart={cart}
         onClose={closeModal}
-        checkOut={checkOut}
+        checkOut={handleCheckout}
         flexible={receipt}
         onRemoveItem={handleRemoveItem}
       >
