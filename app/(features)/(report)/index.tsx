@@ -1,5 +1,6 @@
-import MonthlyReport from "@/components/MonthlyReport";
+import SalesReport from "@/components/SalesReport";
 import React from "react";
+import { View } from "react-native";
 
 const ReportScreen = () => {
   const now = new Date();
@@ -7,9 +8,9 @@ const ReportScreen = () => {
   const month = now.getMonth() + 1; // karena getMonth() mulai dari 0
 
   return (
-    // <ScrollView className="flex-1 bg-gray-50 p-4">
-    <MonthlyReport year={year} month={month} />
-    // </ScrollView>
+    <View className="flex-1 bg-secondary">
+      <SalesReport year={year} month={month} />
+    </View>
   );
 };
 

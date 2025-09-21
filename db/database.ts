@@ -190,3 +190,22 @@ export const getMonthlyReportByCategory = async (
 
   return result;
 };
+
+// 🔹 Ambil laporan berdasarkan rentang tanggal
+export const getReportByDateRange = async (
+  startDate: string,
+  endDate: string
+): Promise<any[]> => {
+  const database = await initDB();
+
+  const result = await database.getAllAsync<any>(
+    `SELECT productId, productName, SUM(quantity) as totalQty, SUM(total) as totalSales
+     FROM transactions
+     WHERE date BETWEEN ? AND ?
+     GROUP BY productId, productName
+     ORDER BY totalSales DESC;`,
+    [startDate, endDate]
+  );
+
+  return result;
+};

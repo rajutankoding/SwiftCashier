@@ -41,17 +41,15 @@ export default function HomeScreen() {
   }, []);
 
   const ProductCard = ({ item }: { item: Product }) => (
-    <View className="w-1/4 p-1">
-      <TouchableOpacity onPress={() => handleAddProduct(item)}>
-        <View className="bg-white rounded-lg shadow-sm overflow-hidden aspect-square items-center justify-center">
-          <Image
-            style={{ width: 80, height: 80 }}
-            source={{ uri: item.image }}
-          />
-        </View>
-        <Text className="text-primary">{item.name}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      className="w-1/4 p-1"
+      onPress={() => handleAddProduct(item)}
+    >
+      <View className="bg-white rounded-lg shadow-sm overflow-hidden aspect-square items-center justify-center">
+        <Image style={{ width: 80, height: 80 }} source={{ uri: item.image }} />
+      </View>
+      <Text className="text-primary">{item.name}</Text>
+    </TouchableOpacity>
   );
 
   const handleAddProduct = (itemToAdd: Product) => {
